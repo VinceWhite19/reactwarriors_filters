@@ -5,31 +5,11 @@ import Pagination from "./Pagination";
 import Genres from "./Genres";
 
 export default class Filters extends Component {
-  state = {
-    genres: []
-  };
-
-  getGenres = () => {
-    const link = `${process.env.REACT_APP_API_URL}/genre/movie/list?api_key=${process.env.REACT_APP_API_KEY_3}&language=en-US`;
-    fetch(link)
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        this.setState({
-          genres: data.genres
-        });
-      });
-  };
-  componentDidMount() {
-    this.getGenres();
-  }
-
   render() {
     const {
       filters: { sort_by, primary_release_year, with_genres },
       onChangeFilters,
-      onChangePage,
+      onChangePagination,
       resetFilters,
       page,
       total_pages
@@ -46,15 +26,11 @@ export default class Filters extends Component {
             onChangeFilters={onChangeFilters}
           />
 
-          <Genres
-            with_genres={with_genres}
-            genres={this.state.genres}
-            onChangeFilters={onChangeFilters}
-          />
+          <Genres with_genres={with_genres} onChangeFilters={onChangeFilters} />
           <Pagination
             page={page}
             total_pages={total_pages}
-            onChangePage={onChangePage}
+            onChangePagination={onChangePagination}
             resetFilters={resetFilters}
           />
         </form>

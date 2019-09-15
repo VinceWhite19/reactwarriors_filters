@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import MovieItem from "./MovieItem";
+import { API_URL, API_KEY_3 } from "../../api/api";
+import _ from "lodash";
 
 export default class MovieList extends Component {
   state = {
     movies: []
   };
-  getMovies = (filters, page) => {
-    const { sort_by, primary_release_year, with_genres } = filters;
+  getMovies = page => {
+    const { sort_by, primary_release_year, with_genres } = this.props.filters;
 
-    const link = `${process.env.REACT_APP_API_URL}/discover/movie?api_key=${
-      process.env.REACT_APP_API_KEY_3
-    }&language=ru-RU&sort_by=${sort_by}&&primary_release_year=${primary_release_year}&page=${page}${
+    const link = `${API_URL}/discover/movie?api_key=${API_KEY_3}&language=ru-RU&sort_by=${sort_by}&&primary_release_year=${primary_release_year}&page=${page}${
       with_genres.length > 0 ? `&with_genres=${with_genres.join()}` : ""
     }`;
     fetch(link)
@@ -21,33 +21,29 @@ export default class MovieList extends Component {
         this.setState({
           movies: data.results
         });
-        this.props.updateTotalPages(data.total_pages);
+        this.props.onChangePagination({
+          name: "total_pages",
+          value: data.total_pages
+        });
       });
   };
 
   componentDidMount() {
-    this.getMovies(this.props.filters, this.props.page);
+    this.getMovies(this.props.page);
   }
 
   componentDidUpdate(prevProps) {
-    const { filters, onChangePage, page } = this.props;
+    const { filters, onChangePagination, page } = this.props;
 
-    if (filters.sort_by !== prevProps.filters.sort_by) {
-      onChangePage(1);
-      this.getMovies(filters, 1);
-    }
-    if (
-      filters.primary_release_year !== prevProps.filters.primary_release_year
-    ) {
-      onChangePage(1);
-      this.getMovies(filters, 1);
-    }
-    if (filters.with_genres !== prevProps.filters.with_genres) {
-      onChangePage(1);
-      this.getMovies(filters, 1);
+    if (!_.isEqual(filters, prevProps.filters)) {
+      onChangePagination({
+        name: "page",
+        value: 1
+      });
+      this.getMovies(1);
     }
     if (page !== prevProps.page) {
-      this.getMovies(filters, page);
+      this.getMovies(page);
     }
   }
 

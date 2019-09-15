@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 export default class SortBy extends Component {
+  static propTypes = {
+    onChangeFilters: PropTypes.func.isRequired,
+    sort_by: PropTypes.string.isRequired
+  };
+
   static defaultProps = {
     options: [
       { label: "Популярные по убыванию", value: "popularity.desc" },
@@ -34,8 +39,3 @@ export default class SortBy extends Component {
     );
   }
 }
-
-SortBy.propTypes = {
-  onChangeFilters: PropTypes.func.isRequired,
-  sort_by: PropTypes.string.isRequired
-};

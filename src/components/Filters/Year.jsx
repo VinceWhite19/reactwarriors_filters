@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 export default class Year extends Component {
+  static propTypes = {
+    onChangeFilters: PropTypes.func.isRequired,
+    years: PropTypes.array.isRequired
+  };
+
   static defaultProps = {
     years: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019]
   };
@@ -28,8 +33,3 @@ export default class Year extends Component {
     );
   }
 }
-
-Year.propTypes = {
-  onChangeFilters: PropTypes.func.isRequired,
-  years: PropTypes.array.isRequired
-};

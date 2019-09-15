@@ -1,30 +1,54 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { API_URL, API_KEY_3 } from "../../api/api";
 
 export default class Genres extends Component {
-  onChangeGenres = event => {
-    const values = Array.from(document.querySelectorAll('input[name="genre"]'))
-      .filter(checkbox => checkbox.checked)
-      .map(checkbox => checkbox.value);
-    this.props.onChangeFilters({
+  state = {
+    genres: []
+  };
+
+  getGenres = () => {
+    const link = `${API_URL}/genre/movie/list?api_key=${API_KEY_3}&language=en-US`;
+    fetch(link)
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        this.setState({
+          genres: data.genres
+        });
+      });
+  };
+  componentDidMount() {
+    this.getGenres();
+  }
+
+  onChangeGenres = e => {
+    const value = +e.target.value;
+    const name = e.target.name;
+    const { with_genres, onChangeFilters } = this.props;
+
+    onChangeFilters({
       target: {
-        name: "with_genres",
-        value: values
+        name,
+        value: with_genres.includes(value)
+          ? with_genres.filter(item => item !== value)
+          : [...with_genres, value]
       }
     });
   };
 
   render() {
-    const { genres } = this.props;
     return (
       <div className="genres">
-        {genres.map(genre => {
+        {this.state.genres.map(genre => {
+          const id = +genre.id;
           return (
-            <div key={genre.id} className="form-check">
+            <div key={id} className="form-check">
               <input
-                value={genre.id}
+                value={id}
                 type="checkbox"
-                name="genre"
+                name="with_genres"
+                checked={this.props.with_genres.includes(id)}
                 className="form-check-input"
                 id={genre.name}
                 onChange={this.onChangeGenres}
@@ -39,6 +63,3 @@ export default class Genres extends Component {
     );
   }
 }
-Genres.propTypes = {
-  genres: PropTypes.array.isRequired
-};

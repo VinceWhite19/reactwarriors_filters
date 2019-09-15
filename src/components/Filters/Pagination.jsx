@@ -2,8 +2,14 @@ import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 
 export default class Pagination extends Component {
+  static propTypes = {
+    page: PropTypes.number.isRequired,
+    onChangePagination: PropTypes.func.isRequired,
+    total_pages: PropTypes.number.isRequired
+  };
+
   render() {
-    const { page, onChangePage, total_pages, resetFilters } = this.props;
+    const { page, onChangePagination, total_pages, resetFilters } = this.props;
     return (
       <Fragment>
         <div className="pagination">
@@ -14,14 +20,20 @@ export default class Pagination extends Component {
             type="button"
             className="btn btn-light"
             disabled={page === 1}
-            onClick={onChangePage.bind(null, page - 1)}
+            onClick={onChangePagination.bind(null, {
+              name: "page",
+              value: page - 1
+            })}
           >
             Назад
           </button>
           <button
             type="button"
             className="btn btn-light"
-            onClick={onChangePage.bind(null, page + 1)}
+            onClick={onChangePagination.bind(null, {
+              name: "page",
+              value: page + 1
+            })}
           >
             Вперед
           </button>
@@ -39,8 +51,3 @@ export default class Pagination extends Component {
     );
   }
 }
-Pagination.propTypes = {
-  page: PropTypes.number.isRequired,
-  onChangePage: PropTypes.func.isRequired,
-  total_pages: PropTypes.number.isRequired
-};
