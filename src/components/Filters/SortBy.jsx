@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 
-export default class SortBy extends Component {
+export default class SortBy extends PureComponent {
   static propTypes = {
     onChangeFilters: PropTypes.func.isRequired,
     sort_by: PropTypes.string.isRequired

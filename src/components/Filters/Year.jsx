@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 
-export default class Year extends Component {
+export default class Year extends PureComponent {
   static propTypes = {
     onChangeFilters: PropTypes.func.isRequired,
     years: PropTypes.array.isRequired

@@ -1,7 +1,7 @@
-import React, { Component, Fragment } from "react";
+import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
 
-export default class Pagination extends Component {
+export default class Pagination extends PureComponent {
   static propTypes = {
     page: PropTypes.number.isRequired,
     onChangePagination: PropTypes.func.isRequired,
