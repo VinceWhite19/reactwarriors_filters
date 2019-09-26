@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import FormField from "./FormField";
+import FormButton from "./FormButton";
 import { API_URL, API_KEY_3, fetchApi } from "../../../api/api";
 
 export default class LoginForm extends PureComponent {
@@ -173,17 +174,11 @@ export default class LoginForm extends PureComponent {
             onBlur={this.handleBlur}
             error={errors.passwordRepeat}
           />
-          <button
-            type="submit"
-            className="btn btn-lg btn-primary btn-block"
-            onClick={this.onLogin}
-            disabled={submitting}
-          >
-            Вход
-          </button>
-          {errors.base && (
-            <div className="invalid-feedback text-center">{errors.base}</div>
-          )}
+          <FormButton
+            submitting={submitting}
+            error={errors.base}
+            onLogin={this.onLogin}
+          />
         </form>
       </div>
     );
