@@ -1,6 +1,10 @@
 import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 
 export default class User extends PureComponent {
+  static propTypes = {
+    user: PropTypes.object.isRequired
+  };
   render() {
     const { user } = this.props;
     return (

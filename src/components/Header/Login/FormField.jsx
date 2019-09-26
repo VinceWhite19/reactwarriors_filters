@@ -1,6 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-const Field = props => {
+const FormField = props => {
   const {
     id,
     labelText,
@@ -32,4 +33,16 @@ const Field = props => {
   );
 };
 
-export default Field;
+FormField.propTypes = {
+  id: PropTypes.string.isRequired,
+  labelText: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onBlur: PropTypes.func.isRequired,
+  error: PropTypes.string.isRequired
+};
+
+export default FormField;

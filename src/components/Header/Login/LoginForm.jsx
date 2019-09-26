@@ -2,8 +2,14 @@ import React, { PureComponent } from "react";
 import FormField from "./FormField";
 import FormButton from "./FormButton";
 import { API_URL, API_KEY_3, fetchApi } from "../../../api/api";
+import PropTypes from "prop-types";
 
 export default class LoginForm extends PureComponent {
+  static propTypes = {
+    updateSessionId: PropTypes.func.isRequired,
+    updateUser: PropTypes.func.isRequired
+  };
+
   state = {
     username: "",
     password: "",

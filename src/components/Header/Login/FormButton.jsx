@@ -1,8 +1,7 @@
 import React, { Fragment } from "react";
+import PropTypes from "prop-types";
 
-const FormButton = props => {
-  const { submitting, onLogin, error } = props;
-
+const FormButton = ({ submitting, onLogin, error }) => {
   return (
     <Fragment>
       <button
@@ -18,4 +17,9 @@ const FormButton = props => {
   );
 };
 
+FormButton.propTypes = {
+  submitting: PropTypes.bool.isRequired,
+  onLogin: PropTypes.func.isRequired,
+  error: PropTypes.string.isRequired
+};
 export default FormButton;

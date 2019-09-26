@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import LoginForm from "./LoginForm";
 import { Modal, ModalBody } from "reactstrap";
+import PropTypes from "prop-types";
 
 export default class Login extends Component {
   constructor() {
@@ -9,6 +10,10 @@ export default class Login extends Component {
       showModal: false
     };
   }
+  static propTypes = {
+    updateSessionId: PropTypes.func.isRequired,
+    updateUser: PropTypes.func.isRequired
+  };
 
   toggleModal = () => {
     this.setState(prevState => ({
