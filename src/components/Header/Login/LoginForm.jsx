@@ -155,7 +155,7 @@ export default class LoginForm extends PureComponent {
             id="password"
             labelText="Пароль"
             placeholder="Введите пароль"
-            type="text"
+            type="password"
             name="password"
             value={password}
             onChange={this.onChange}
@@ -166,7 +166,7 @@ export default class LoginForm extends PureComponent {
             id="passwordRepeat"
             labelText="Повторите пароль"
             placeholder="Повторите пароль"
-            type="text"
+            type="password"
             name="passwordRepeat"
             value={passwordRepeat}
             onChange={this.onChange}
