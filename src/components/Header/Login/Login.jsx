@@ -1,45 +1,21 @@
-import React, { Component, Fragment } from "react";
+import React, { Fragment } from "react";
 import LoginForm from "./LoginForm";
 import { Modal, ModalBody } from "reactstrap";
-import PropTypes from "prop-types";
+import AppContextHOC from "../../HOC/AppContextHOC";
 
-export default class Login extends Component {
-  constructor() {
-    super();
-    this.state = {
-      showModal: false
-    };
-  }
-  static propTypes = {
-    updateSessionId: PropTypes.func.isRequired,
-    updateUser: PropTypes.func.isRequired
-  };
+const Login = ({ toggleModal, showModal }) => {
+  return (
+    <Fragment>
+      <button className="btn btn-success" type="button" onClick={toggleModal}>
+        Login
+      </button>
+      <Modal isOpen={showModal} toggle={toggleModal}>
+        <ModalBody>
+          <LoginForm />
+        </ModalBody>
+      </Modal>
+    </Fragment>
+  );
+};
 
-  toggleModal = () => {
-    this.setState(prevState => ({
-      showModal: !prevState.showModal
-    }));
-  };
-
-  render() {
-    return (
-      <Fragment>
-        <button
-          className="btn btn-success"
-          type="button"
-          onClick={this.toggleModal}
-        >
-          Login
-        </button>
-        <Modal isOpen={this.state.showModal} toggle={this.toggleModal}>
-          <ModalBody>
-            <LoginForm
-              updateUser={this.props.updateUser}
-              updateSessionId={this.props.updateSessionId}
-            />
-          </ModalBody>
-        </Modal>
-      </Fragment>
-    );
-  }
-}
+export default AppContextHOC(Login);

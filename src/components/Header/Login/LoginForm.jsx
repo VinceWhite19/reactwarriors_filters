@@ -1,10 +1,11 @@
 import React, { PureComponent } from "react";
 import FormField from "./FormField";
 import FormButton from "./FormButton";
-import { API_URL, API_KEY_3, fetchApi } from "../../../api/api";
+import CallApi from "../../../api/api";
+import AppContextHOC from "../../HOC/AppContextHOC";
 import PropTypes from "prop-types";
 
-export default class LoginForm extends PureComponent {
+class LoginForm extends PureComponent {
   static propTypes = {
     updateSessionId: PropTypes.func.isRequired,
     updateUser: PropTypes.func.isRequired
@@ -46,6 +47,7 @@ export default class LoginForm extends PureComponent {
   validateFields = () => {
     const errors = {};
     const { username, password, passwordRepeat } = this.state;
+
     if (username === "") {
       errors.username = "Обязательное!";
     }
@@ -65,49 +67,41 @@ export default class LoginForm extends PureComponent {
     });
 
     try {
-      const data = await fetchApi(
-        `${API_URL}/authentication/token/new?api_key=${API_KEY_3}`
-      );
+      const data = await CallApi.get("/authentication/token/new");
 
-      const result = await fetchApi(
-        `${API_URL}/authentication/token/validate_with_login?api_key=${API_KEY_3}`,
+      const result = await CallApi.post(
+        "/authentication/token/validate_with_login",
         {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-type": "application/json"
-          },
-          body: JSON.stringify({
+          body: {
             username: this.state.username,
             password: this.state.password,
             request_token: data.request_token
-          })
+          }
         }
       );
 
-      const { session_id } = await fetchApi(
-        `${API_URL}/authentication/session/new?api_key=${API_KEY_3}`,
-        {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-type": "application/json"
-          },
-          body: JSON.stringify({
-            request_token: result.request_token
-          })
+      const { session_id } = await CallApi.post("/authentication/session/new", {
+        body: {
+          request_token: result.request_token
         }
-      );
+      });
+
       this.props.updateSessionId(session_id);
 
-      const user = await fetchApi(
-        `${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`
-      );
-
-      this.props.updateUser(user);
-      this.setState({
-        submitting: false
+      const user = await CallApi.get("/account", {
+        params: {
+          session_id
+        }
       });
+
+      this.setState(
+        {
+          submitting: false
+        },
+        () => {
+          this.props.updateUser(user);
+        }
+      );
     } catch (error) {
       this.setState({
         submitting: false,
@@ -190,3 +184,5 @@ export default class LoginForm extends PureComponent {
     );
   }
 }
+
+export default AppContextHOC(LoginForm);

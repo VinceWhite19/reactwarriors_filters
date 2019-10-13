@@ -20,6 +20,6 @@ const FormButton = ({ submitting, onLogin, error }) => {
 FormButton.propTypes = {
   submitting: PropTypes.bool.isRequired,
   onLogin: PropTypes.func.isRequired,
-  error: PropTypes.string.isRequired
+  error: PropTypes.string
 };
 export default FormButton;

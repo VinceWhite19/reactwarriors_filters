@@ -1,11 +1,13 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment, createContext } from "react";
 import Filters from "./Filters/Filters";
 import MoviesList from "./Movies/MoviesList";
 import Header from "./Header/Header";
-import { API_URL, API_KEY_3, fetchApi } from "../api/api";
+import CallApi from "../api/api";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
+
+export const AppContext = createContext();
 
 export default class App extends Component {
   state = {
@@ -19,7 +21,8 @@ export default class App extends Component {
     pagination: {
       page: 1,
       total_pages: 0
-    }
+    },
+    showModal: false
   };
 
   updateUser = user => {
@@ -42,6 +45,19 @@ export default class App extends Component {
     }));
   };
 
+  toggleModal = () => {
+    this.setState(prevState => ({
+      showModal: !prevState.showModal
+    }));
+  };
+
+  onLogOut = () => {
+    cookies.remove("session_id");
+    this.setState({
+      session_id: null,
+      user: null
+    });
+  };
   onChangePagination = ({ name, value }) => {
     this.setState(prevState => ({
       pagination: { ...prevState.pagination, [name]: value }
@@ -66,10 +82,11 @@ export default class App extends Component {
   componentDidMount() {
     const session_id = cookies.get("session_id");
     if (session_id) {
-      fetchApi(
-        `${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`
-      ).then(user => {
+      CallApi.get("/account", {
+        params: { session_id }
+      }).then(user => {
         this.updateUser(user);
+        this.updateSessionId(session_id);
       });
     }
   }
@@ -78,42 +95,52 @@ export default class App extends Component {
     const {
       user,
       filters,
+      session_id,
+      showModal,
       pagination: { page, total_pages }
     } = this.state;
 
     return (
-      <Fragment>
-        <Header
-          user={user}
-          updateUser={this.updateUser}
-          updateSessionId={this.updateSessionId}
-        />
-        <div className="container">
-          <div className="row mt-4">
-            <div className="col-4">
-              <div className="card" style={{ width: "100%" }}>
-                <div className="card-body">
-                  <Filters
-                    filters={filters}
-                    page={page}
-                    total_pages={total_pages}
-                    onChangeFilters={this.onChangeFilters}
-                    onChangePagination={this.onChangePagination}
-                    resetFilters={this.resetFilters}
-                  />
+      <AppContext.Provider
+        value={{
+          user,
+          updateUser: this.updateUser,
+          session_id,
+          updateSessionId: this.updateSessionId,
+          onLogOut: this.onLogOut,
+          toggleModal: this.toggleModal,
+          showModal
+        }}
+      >
+        <Fragment>
+          <Header user={user} updateSessionId={this.updateSessionId} />
+          <div className="container">
+            <div className="row mt-4">
+              <div className="col-4">
+                <div className="card" style={{ width: "100%" }}>
+                  <div className="card-body">
+                    <Filters
+                      filters={filters}
+                      page={page}
+                      total_pages={total_pages}
+                      onChangeFilters={this.onChangeFilters}
+                      onChangePagination={this.onChangePagination}
+                      resetFilters={this.resetFilters}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-8">
-              <MoviesList
-                onChangePagination={this.onChangePagination}
-                page={page}
-                filters={filters}
-              />
+              <div className="col-8">
+                <MoviesList
+                  onChangePagination={this.onChangePagination}
+                  page={page}
+                  filters={filters}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </Fragment>
+        </Fragment>
+      </AppContext.Provider>
     );
   }
 }

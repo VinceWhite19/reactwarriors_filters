@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import UISelect from "../UIComponents/UISelect";
 import PropTypes from "prop-types";
 
 export default class Year extends PureComponent {
@@ -14,22 +15,19 @@ export default class Year extends PureComponent {
     const { primary_release_year, onChangeFilters, years } = this.props;
 
     return (
-      <div className="form-group">
-        <label htmlFor="primary_release_year">Год выпуска:</label>
-        <select
-          id="primary_release_year"
-          name="primary_release_year"
-          className="form-control"
-          value={primary_release_year}
-          onChange={onChangeFilters}
-        >
-          {years.map(year => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-      </div>
+      <UISelect
+        id="primary_release_year"
+        name="primary_release_year"
+        value={primary_release_year}
+        onChange={onChangeFilters}
+        labelText="Год выпуска:"
+      >
+        {years.map(year => (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        ))}
+      </UISelect>
     );
   }
 }
