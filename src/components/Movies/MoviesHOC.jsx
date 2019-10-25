@@ -26,8 +26,8 @@ export default Component =>
           movies: data.results
         });
         this.props.onChangePagination({
-          name: "total_pages",
-          value: data.total_pages
+          page: data.page,
+          total_pages: data.total_pages
         });
       });
     };
@@ -53,6 +53,6 @@ export default Component =>
 
     render() {
       const { movies } = this.state;
-      return <Component movies={movies} />;
+      return <Component {...this.props} movies={movies} />;
     }
   };

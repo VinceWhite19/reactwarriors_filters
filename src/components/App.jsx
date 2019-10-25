@@ -1,4 +1,4 @@
-import React, { Component, Fragment, createContext } from "react";
+import React, { Component, createContext } from "react";
 import Filters from "./Filters/Filters";
 import MoviesList from "./Movies/MoviesList";
 import Header from "./Header/Header";
@@ -22,6 +22,8 @@ export default class App extends Component {
       page: 1,
       total_pages: 0
     },
+    loadedFavorites: false,
+    loadedBookmarks: false,
     showModal: false
   };
 
@@ -40,9 +42,44 @@ export default class App extends Component {
       ...this.state.filters,
       [event.target.name]: event.target.value
     };
-    this.setState(prevState => ({
+    this.setState({
       filters: newFilters
-    }));
+    });
+  };
+  getFavorites = async user => {
+    try {
+      const data = await CallApi.get(`/account/${user.id}/favorite/movies`, {
+        params: { session_id: this.state.session_id }
+      });
+      const result = data.results.map(result => result.id);
+      this.setState(prevState => ({
+        user: {
+          ...prevState.user,
+          favorites: result
+        },
+        loadedFavorites: true
+      }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  getWatchlist = async user => {
+    try {
+      const data = await CallApi.get(`/account/${user.id}/watchlist/movies`, {
+        params: { session_id: this.state.session_id }
+      });
+      const result = data.results.map(result => result.id);
+      this.setState(prevState => ({
+        user: {
+          ...prevState.user,
+          watchlist: result
+        },
+        loadedBookmarks: true
+      }));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   toggleModal = () => {
@@ -58,10 +95,13 @@ export default class App extends Component {
       user: null
     });
   };
-  onChangePagination = ({ name, value }) => {
-    this.setState(prevState => ({
-      pagination: { ...prevState.pagination, [name]: value }
-    }));
+  onChangePagination = ({
+    page,
+    total_pages = this.state.pagination.total_pages
+  }) => {
+    this.setState({
+      pagination: { page, total_pages }
+    });
   };
 
   resetFilters = event => {
@@ -87,6 +127,8 @@ export default class App extends Component {
       }).then(user => {
         this.updateUser(user);
         this.updateSessionId(session_id);
+        this.getFavorites(user);
+        this.getWatchlist(user);
       });
     }
   }
@@ -96,6 +138,8 @@ export default class App extends Component {
       user,
       filters,
       session_id,
+      loadedFavorites,
+      loadedBookmarks,
       showModal,
       pagination: { page, total_pages }
     } = this.state;
@@ -106,18 +150,21 @@ export default class App extends Component {
           user,
           updateUser: this.updateUser,
           session_id,
+          loadedFavorites,
+          loadedBookmarks,
+          getFavorites: this.getFavorites,
           updateSessionId: this.updateSessionId,
           onLogOut: this.onLogOut,
           toggleModal: this.toggleModal,
           showModal
         }}
       >
-        <Fragment>
+        <>
           <Header user={user} updateSessionId={this.updateSessionId} />
           <div className="container">
             <div className="row mt-4">
               <div className="col-4">
-                <div className="card" style={{ width: "100%" }}>
+                <div className="card">
                   <div className="card-body">
                     <Filters
                       filters={filters}
@@ -135,11 +182,13 @@ export default class App extends Component {
                   onChangePagination={this.onChangePagination}
                   page={page}
                   filters={filters}
+                  loadedFavorites={loadedFavorites}
+                  loadedBookmarks={loadedBookmarks}
                 />
               </div>
             </div>
           </div>
-        </Fragment>
+        </>
       </AppContext.Provider>
     );
   }

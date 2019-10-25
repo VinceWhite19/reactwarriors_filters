@@ -8,8 +8,22 @@ export default class Pagination extends PureComponent {
     total_pages: PropTypes.number.isRequired
   };
 
+  nextPage = () => {
+    this.props.onChangePagination({
+      page: this.props.page + 1,
+      total_pages: this.props.total_pages
+    });
+  };
+
+  prevPage = page => event => {
+    this.props.onChangePagination({
+      page: this.props.page - 1,
+      total_pages: this.props.total_pages
+    });
+  };
+
   render() {
-    const { page, onChangePagination, total_pages, resetFilters } = this.props;
+    const { page, total_pages, resetFilters } = this.props;
     return (
       <Fragment>
         <div className="pagination">
@@ -20,20 +34,14 @@ export default class Pagination extends PureComponent {
             type="button"
             className="btn btn-light"
             disabled={page === 1}
-            onClick={onChangePagination.bind(null, {
-              name: "page",
-              value: page - 1
-            })}
+            onClick={this.prevPage(page)}
           >
             Назад
           </button>
           <button
             type="button"
             className="btn btn-light"
-            onClick={onChangePagination.bind(null, {
-              name: "page",
-              value: page + 1
-            })}
+            onClick={this.nextPage}
           >
             Вперед
           </button>

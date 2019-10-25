@@ -1,9 +1,11 @@
-import React, { Fragment } from "react";
+import React from "react";
+import FavoriteBtn from "./FavoriteBtn";
+import WatchlistBtn from "./WatchlistBtn";
 import PropTypes from "prop-types";
 
-const MovieItem = ({ item }) => {
+const MovieItem = ({ item, loadedFavorites, loadedBookmarks }) => {
   return (
-    <Fragment>
+    <div style={{ width: "100%" }} className="card">
       <img
         className="card-img-top card-img--height"
         src={`https://image.tmdb.org/t/p/w500${item.backdrop_path ||
@@ -14,7 +16,11 @@ const MovieItem = ({ item }) => {
         <h6 className="card-title">{item.title}</h6>
         <div className="card-text">Рейтинг: {item.vote_average}</div>
       </div>
-    </Fragment>
+      <div className="action-buttons p-1 d-flex justify-content-around">
+        {loadedFavorites && <FavoriteBtn item={item} />}
+        {loadedBookmarks && <WatchlistBtn item={item} />}
+      </div>
+    </div>
   );
 };
 
