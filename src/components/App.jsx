@@ -46,11 +46,14 @@ export default class App extends Component {
       filters: newFilters
     });
   };
-  getFavorites = async user => {
+  getFavorites = async () => {
     try {
-      const data = await CallApi.get(`/account/${user.id}/favorite/movies`, {
-        params: { session_id: this.state.session_id }
-      });
+      const data = await CallApi.get(
+        `/account/${this.state.user.id}/favorite/movies`,
+        {
+          params: { session_id: this.state.session_id }
+        }
+      );
       const result = data.results.map(result => result.id);
       this.setState(prevState => ({
         user: {
@@ -127,7 +130,7 @@ export default class App extends Component {
       }).then(user => {
         this.updateUser(user);
         this.updateSessionId(session_id);
-        this.getFavorites(user);
+        this.getFavorites();
         this.getWatchlist(user);
       });
     }

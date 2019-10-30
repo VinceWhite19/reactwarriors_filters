@@ -14,13 +14,14 @@ class FavoriteBtn extends React.Component {
       favorite: this.props.user.favorites.includes(this.props.item.id)
     });
   };
+
   runApiCall = () => {
     return CallApi.post(`/account/${this.props.user.id}/favorite`, {
       params: { session_id: this.props.session_id },
       body: {
         media_type: "movie",
         media_id: this.props.item.id,
-        favorite: this.state.favorite
+        favorite: !this.state.favorite
       }
     });
   };
@@ -34,7 +35,6 @@ class FavoriteBtn extends React.Component {
     );
     this.props.getFavorites();
   };
-
   componentDidMount() {
     this.setInitialState();
   }
