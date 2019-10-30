@@ -50,9 +50,9 @@ FavoriteBtn.defaultProps = {
 };
 
 FavoriteBtn.propTypes = {
-  favorites: PropTypes.array.isRequired,
-  user: PropTypes.object.isRequired,
-  session_id: PropTypes.string.isRequired,
+  favorites: PropTypes.array,
+  user: PropTypes.object,
+  session_id: PropTypes.string,
   item: PropTypes.object.isRequired,
   getFavorites: PropTypes.func.isRequired,
   toggleModal: PropTypes.func.isRequired

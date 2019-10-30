@@ -50,9 +50,9 @@ WatchlistBtn.defaultProps = {
 };
 
 WatchlistBtn.propTypes = {
-  watchlist: PropTypes.array.isRequired,
-  user: PropTypes.object.isRequired,
-  session_id: PropTypes.string.isRequired,
+  watchlist: PropTypes.array,
+  user: PropTypes.object,
+  session_id: PropTypes.string,
   item: PropTypes.object.isRequired,
   getWatchlist: PropTypes.func.isRequired,
   toggleModal: PropTypes.func.isRequired
