@@ -22,8 +22,8 @@ export default class App extends Component {
       page: 1,
       total_pages: 0
     },
-    loadedFavorites: false,
-    loadedBookmarks: false,
+    favorites: [],
+    watchlist: [],
     showModal: false
   };
 
@@ -56,29 +56,26 @@ export default class App extends Component {
       );
       const result = data.results.map(result => result.id);
       this.setState(prevState => ({
-        user: {
-          ...prevState.user,
-          favorites: result
-        },
-        loadedFavorites: true
+        ...prevState,
+        favorites: result
       }));
     } catch (err) {
       console.log(err);
     }
   };
 
-  getWatchlist = async user => {
+  getWatchlist = async () => {
     try {
-      const data = await CallApi.get(`/account/${user.id}/watchlist/movies`, {
-        params: { session_id: this.state.session_id }
-      });
+      const data = await CallApi.get(
+        `/account/${this.state.user.id}/watchlist/movies`,
+        {
+          params: { session_id: this.state.session_id }
+        }
+      );
       const result = data.results.map(result => result.id);
       this.setState(prevState => ({
-        user: {
-          ...prevState.user,
-          watchlist: result
-        },
-        loadedBookmarks: true
+        ...prevState,
+        watchlist: result
       }));
     } catch (err) {
       console.log(err);
@@ -131,7 +128,7 @@ export default class App extends Component {
         this.updateUser(user);
         this.updateSessionId(session_id);
         this.getFavorites();
-        this.getWatchlist(user);
+        this.getWatchlist();
       });
     }
   }
@@ -141,8 +138,8 @@ export default class App extends Component {
       user,
       filters,
       session_id,
-      loadedFavorites,
-      loadedBookmarks,
+      favorites,
+      watchlist,
       showModal,
       pagination: { page, total_pages }
     } = this.state;
@@ -153,9 +150,10 @@ export default class App extends Component {
           user,
           updateUser: this.updateUser,
           session_id,
-          loadedFavorites,
-          loadedBookmarks,
+          favorites,
+          watchlist,
           getFavorites: this.getFavorites,
+          getWatchlist: this.getWatchlist,
           updateSessionId: this.updateSessionId,
           onLogOut: this.onLogOut,
           toggleModal: this.toggleModal,
@@ -185,8 +183,6 @@ export default class App extends Component {
                   onChangePagination={this.onChangePagination}
                   page={page}
                   filters={filters}
-                  loadedFavorites={loadedFavorites}
-                  loadedBookmarks={loadedBookmarks}
                 />
               </div>
             </div>

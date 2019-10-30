@@ -3,7 +3,7 @@ import FavoriteBtn from "./FavoriteBtn";
 import WatchlistBtn from "./WatchlistBtn";
 import PropTypes from "prop-types";
 
-const MovieItem = ({ item, loadedFavorites, loadedBookmarks }) => {
+const MovieItem = ({ item }) => {
   return (
     <div style={{ width: "100%" }} className="card">
       <img
@@ -17,8 +17,8 @@ const MovieItem = ({ item, loadedFavorites, loadedBookmarks }) => {
         <div className="card-text">Рейтинг: {item.vote_average}</div>
       </div>
       <div className="action-buttons p-1 d-flex justify-content-around">
-        {loadedFavorites && <FavoriteBtn item={item} />}
-        {loadedBookmarks && <WatchlistBtn item={item} />}
+        <FavoriteBtn item={item} />
+        <WatchlistBtn item={item} />
       </div>
     </div>
   );

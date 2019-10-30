@@ -3,52 +3,52 @@ import { Bookmark, BookmarkBorder } from "@material-ui/icons";
 import Fab from "@material-ui/core/Fab";
 import AppContextHOC from "../HOC/AppContextHOC";
 import CallApi from "../../api/api";
+import PropTypes from "prop-types";
 
-class WatchlistBtn extends React.Component {
-  state = {
-    watchlist: false
-  };
-  setInitialState = () => {
-    this.setState({
-      watchlist: this.props.user.watchlist.includes(this.props.item.id)
-    });
-  };
-  runApiCall = () => {
-    return CallApi.post(`/account/${this.props.user.id}/watchlist`, {
-      params: { session_id: this.props.session_id },
+const WatchlistBtn = ({
+  watchlist,
+  item,
+  user,
+  session_id,
+  getWatchlist,
+  toggleModal
+}) => {
+  const isWatchlist = () => watchlist.includes(item.id);
+
+  const runApiCall = () => {
+    return CallApi.post(`/account/${user.id}/watchlist`, {
+      params: { session_id: session_id },
       body: {
         media_type: "movie",
-        media_id: this.props.item.id,
-        watchlist: this.state.watchlist
+        media_id: item.id,
+        watchlist: !isWatchlist()
       }
     });
   };
 
-  toggleBookmark = () => {
-    this.setState(
-      prevState => ({
-        watchlist: !prevState.watchlist
-      }),
-      this.runApiCall
-    );
+  const toggleBookmark = () => {
+    runApiCall();
+    getWatchlist();
+    isWatchlist();
   };
-  componentDidMount() {
-    this.setInitialState();
-  }
-  render() {
-    const { toggleModal, session_id } = this.props;
-    const { watchlist } = this.state;
-    return (
-      <Fab
-        onClick={session_id ? this.toggleBookmark : toggleModal}
-        size="small"
-        color="secondary"
-        aria-label="add"
-      >
-        {watchlist ? <Bookmark /> : <BookmarkBorder />}
-      </Fab>
-    );
-  }
-}
 
+  return (
+    <Fab
+      onClick={session_id ? toggleBookmark : toggleModal}
+      size="small"
+      color="secondary"
+      aria-label="add"
+    >
+      {isWatchlist() ? <Bookmark /> : <BookmarkBorder />}
+    </Fab>
+  );
+};
+WatchlistBtn.propTypes = {
+  watchlist: PropTypes.array.isRequired,
+  user: PropTypes.object.isRequired,
+  session_id: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
+  getWatchlist: PropTypes.func.isRequired,
+  toggleModal: PropTypes.func.isRequired
+};
 export default AppContextHOC(WatchlistBtn);
