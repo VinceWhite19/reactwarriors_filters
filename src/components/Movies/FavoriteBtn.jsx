@@ -44,6 +44,11 @@ const FavoriteBtn = ({
   );
 };
 
+FavoriteBtn.defaultProps = {
+  user: {},
+  session_id: null
+};
+
 FavoriteBtn.propTypes = {
   favorites: PropTypes.array.isRequired,
   user: PropTypes.object.isRequired,

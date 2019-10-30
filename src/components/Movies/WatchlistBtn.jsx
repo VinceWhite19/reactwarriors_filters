@@ -43,6 +43,12 @@ const WatchlistBtn = ({
     </Fab>
   );
 };
+
+WatchlistBtn.defaultProps = {
+  user: {},
+  session_id: null
+};
+
 WatchlistBtn.propTypes = {
   watchlist: PropTypes.array.isRequired,
   user: PropTypes.object.isRequired,
