@@ -12,11 +12,13 @@ export default Component =>
       onChangeFilters: PropTypes.func.isRequired
     };
     getGenres = () => {
-      CallApi.get("/genre/movie/list").then(data => {
-        this.setState({
-          genres: data.genres
-        });
-      });
+      CallApi.get("/genre/movie/list", { params: { language: "ru-RU" } }).then(
+        data => {
+          this.setState({
+            genres: data.genres
+          });
+        }
+      );
     };
     componentDidMount() {
       this.getGenres();

@@ -5,7 +5,8 @@ import _ from "lodash";
 export default Component =>
   class MoviesHOC extends PureComponent {
     state = {
-      movies: []
+      movies: [],
+      loading: false
     };
     getMovies = page => {
       const { sort_by, primary_release_year, with_genres } = this.props.filters;
@@ -18,12 +19,15 @@ export default Component =>
 
       if (with_genres.length > 0)
         queryStringParams.with_genres = with_genres.join(",");
-
+      this.setState({
+        loading: true
+      });
       CallApi.get("/discover/movie", {
         params: queryStringParams
       }).then(data => {
         this.setState({
-          movies: data.results
+          movies: data.results,
+          loading: false
         });
         this.props.onChangePagination({
           page: data.page,
@@ -52,7 +56,7 @@ export default Component =>
     }
 
     render() {
-      const { movies } = this.state;
-      return <Component {...this.props} movies={movies} />;
+      const { movies, loading } = this.state;
+      return <Component {...this.props} movies={movies} loading={loading} />;
     }
   };

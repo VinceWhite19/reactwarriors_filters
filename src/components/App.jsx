@@ -178,7 +178,7 @@ export default class App extends Component {
                   </div>
                 </div>
               </div>
-              <div className="col-8">
+              <div className="col-8 d-flex align-items-center">
                 <MoviesList
                   onChangePagination={this.onChangePagination}
                   page={page}

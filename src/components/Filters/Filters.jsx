@@ -20,6 +20,16 @@ export default class Filters extends Component {
         <h3>Фильтры:</h3>
 
         <form className="mb-3">
+          <div className="btn-group my-2">
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={resetFilters}
+            >
+              Сбросить Фильтры
+            </button>
+          </div>
+
           <SortBy sort_by={sort_by} onChangeFilters={onChangeFilters} />
           <Year
             primary_release_year={primary_release_year}
@@ -34,7 +44,6 @@ export default class Filters extends Component {
             page={page}
             total_pages={total_pages}
             onChangePagination={onChangePagination}
-            resetFilters={resetFilters}
           />
         </form>
       </Fragment>

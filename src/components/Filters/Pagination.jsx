@@ -23,13 +23,13 @@ export default class Pagination extends PureComponent {
   };
 
   render() {
-    const { page, total_pages, resetFilters } = this.props;
+    const { page, total_pages } = this.props;
     return (
       <Fragment>
-        <div className="pagination">
+        <div className="pagination d-flex justify-content-center mt-3">
           страница {page} из {total_pages}
         </div>
-        <div className="btn-group">
+        <div className="btn-group mt-4 d-flex">
           <button
             type="button"
             className="btn btn-light"
@@ -40,19 +40,10 @@ export default class Pagination extends PureComponent {
           </button>
           <button
             type="button"
-            className="btn btn-light"
+            className="btn btn-primary"
             onClick={this.nextPage}
           >
             Вперед
-          </button>
-        </div>
-        <div className="btn-group">
-          <button
-            type="button"
-            className="btn btn-danger"
-            onClick={resetFilters}
-          >
-            Сбросить Фильтры
           </button>
         </div>
       </Fragment>
