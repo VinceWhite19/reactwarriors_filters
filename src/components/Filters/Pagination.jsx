@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 export default class Pagination extends PureComponent {
   static propTypes = {
-    page: PropTypes.number.isRequired,
+    page: PropTypes.number,
     onChangePagination: PropTypes.func.isRequired,
     total_pages: PropTypes.number.isRequired
   };
