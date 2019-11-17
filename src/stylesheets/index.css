@@ -8,3 +8,18 @@ body {
   max-height: 185px;
   object-fit: cover;
 }
+
+img {
+  max-width: 100%;
+}
+
+iframe {
+  max-width: 100%;
+}
+.actor img {
+  cursor: pointer;
+  width: 120px;
+  height: 180px;
+  margin-left: 0px;
+  margin-top: 0px;
+}

@@ -2,6 +2,7 @@ import React from "react";
 import FavoriteBtn from "./FavoriteBtn";
 import WatchlistBtn from "./WatchlistBtn";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const MovieItem = ({ item }) => {
   return (
@@ -13,7 +14,9 @@ const MovieItem = ({ item }) => {
         alt=""
       />
       <div className="card-body">
-        <h6 className="card-title">{item.title}</h6>
+        <Link to={`/movie/${item.id}/details`} className="card-title">
+          {item.title}
+        </Link>
         <div className="card-text">Рейтинг: {item.vote_average}</div>
       </div>
       <div className="action-buttons p-1 d-flex justify-content-around">

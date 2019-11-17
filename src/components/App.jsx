@@ -1,9 +1,10 @@
 import React, { Component, createContext } from "react";
-import Filters from "./Filters/Filters";
-import MoviesList from "./Movies/MoviesList";
 import Header from "./Header/Header";
+import MoviesPage from "./pages/MoviesPage/MoviesPage";
+import MoviePage from "./pages/MoviePage/MoviePage";
 import CallApi from "../api/api";
 import Cookies from "universal-cookie";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 const cookies = new Cookies();
 
@@ -13,15 +14,6 @@ export default class App extends Component {
   state = {
     user: null,
     session_id: null,
-    filters: {
-      sort_by: "vote_average.desc",
-      primary_release_year: "2019",
-      with_genres: []
-    },
-    pagination: {
-      page: 1,
-      total_pages: 0
-    },
     favorites: [],
     watchlist: [],
     showModal: false
@@ -37,15 +29,7 @@ export default class App extends Component {
     });
     this.setState({ session_id });
   };
-  onChangeFilters = event => {
-    const newFilters = {
-      ...this.state.filters,
-      [event.target.name]: event.target.value
-    };
-    this.setState({
-      filters: newFilters
-    });
-  };
+
   getFavorites = async () => {
     try {
       const data = await CallApi.get(
@@ -95,30 +79,6 @@ export default class App extends Component {
       user: null
     });
   };
-  onChangePagination = ({
-    page,
-    total_pages = this.state.pagination.total_pages
-  }) => {
-    this.setState({
-      pagination: { page, total_pages }
-    });
-  };
-
-  resetFilters = event => {
-    event.preventDefault();
-    this.setState(prevState => ({
-      filters: {
-        sort_by: "vote_average.desc",
-        primary_release_year: "2019",
-        with_genres: []
-      },
-      pagination: {
-        page: 1,
-        total_pages: 0
-      }
-    }));
-  };
-
   componentDidMount() {
     const session_id = cookies.get("session_id");
     if (session_id) {
@@ -134,61 +94,30 @@ export default class App extends Component {
   }
 
   render() {
-    const {
-      user,
-      filters,
-      session_id,
-      favorites,
-      watchlist,
-      showModal,
-      pagination: { page, total_pages }
-    } = this.state;
+    const { user, session_id, favorites, watchlist, showModal } = this.state;
 
     return (
-      <AppContext.Provider
-        value={{
-          user,
-          updateUser: this.updateUser,
-          session_id,
-          favorites,
-          watchlist,
-          getFavorites: this.getFavorites,
-          getWatchlist: this.getWatchlist,
-          updateSessionId: this.updateSessionId,
-          onLogOut: this.onLogOut,
-          toggleModal: this.toggleModal,
-          showModal
-        }}
-      >
-        <>
+      <Router>
+        <AppContext.Provider
+          value={{
+            user,
+            updateUser: this.updateUser,
+            session_id,
+            favorites,
+            watchlist,
+            getFavorites: this.getFavorites,
+            getWatchlist: this.getWatchlist,
+            updateSessionId: this.updateSessionId,
+            onLogOut: this.onLogOut,
+            toggleModal: this.toggleModal,
+            showModal
+          }}
+        >
           <Header user={user} updateSessionId={this.updateSessionId} />
-          <div className="container">
-            <div className="row mt-4">
-              <div className="col-4">
-                <div className="card">
-                  <div className="card-body">
-                    <Filters
-                      filters={filters}
-                      page={page}
-                      total_pages={total_pages}
-                      onChangeFilters={this.onChangeFilters}
-                      onChangePagination={this.onChangePagination}
-                      resetFilters={this.resetFilters}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="col-8 d-flex align-items-center">
-                <MoviesList
-                  onChangePagination={this.onChangePagination}
-                  page={page}
-                  filters={filters}
-                />
-              </div>
-            </div>
-          </div>
-        </>
-      </AppContext.Provider>
+          <Route exact path="/" component={MoviesPage} />
+          <Route path="/movie/:id" component={MoviePage} />
+        </AppContext.Provider>
+      </Router>
     );
   }
 }
