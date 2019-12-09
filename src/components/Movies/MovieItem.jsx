@@ -3,14 +3,14 @@ import FavoriteBtn from "./FavoriteBtn";
 import WatchlistBtn from "./WatchlistBtn";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { IMG_URL } from "../../api/api";
 
 const MovieItem = ({ item }) => {
   return (
     <div style={{ width: "100%" }} className="card">
       <img
         className="card-img-top card-img--height"
-        src={`https://image.tmdb.org/t/p/w500${item.backdrop_path ||
-          item.poster_path}`}
+        src={`${IMG_URL}${item.backdrop_path || item.poster_path}`}
         alt=""
       />
       <div className="card-body">

@@ -8,7 +8,7 @@ const MoviesList = ({ movies, loading }) => {
   return (
     <>
       {loading ? (
-        <Spinner style={{ width: "5rem", height: "5rem", margin: "0 auto" }} />
+        <Spinner />
       ) : (
         <div className="row">
           {movies.map(movie => {

@@ -1,5 +1,7 @@
 import queryString from "query-string";
 
+export const IMG_URL = "https://image.tmdb.org/t/p/w500";
+
 export const API_URL = "https://api.themoviedb.org/3";
 
 export const API_KEY_3 = "c318f405831fd1c5a2de805614a20601";
@@ -33,6 +35,7 @@ export default class CallApi {
     const { params = {} } = options;
     const queryStringParams = {
       api_key: API_KEY_3,
+      language: "ru-RU",
       ...params
     };
 

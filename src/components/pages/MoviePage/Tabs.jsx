@@ -2,45 +2,23 @@ import React from "react";
 import MovieDetail from "./MovieDetail";
 import MovieVideos from "./MovieVideos";
 import MovieCredits from "./MovieCredits";
+import NavTabs from "./NavTabs";
 
-import { TabContent, Nav, NavItem } from "reactstrap";
-import { Route, Switch, NavLink } from "react-router-dom";
+import { TabContent } from "reactstrap";
+import { Route, Switch } from "react-router-dom";
 
 const Tabs = ({ movie }) => {
-  const url = `/movie/${movie.id}`;
   return (
     <div className="col-12">
-      <Nav tabs>
-        <NavItem>
-          <NavLink to={`${url}/details`} className="nav-link">
-            Детали
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink to={`${url}/videos`} className="nav-link">
-            Видео
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink to={`${url}/actors`} className="nav-link">
-            Актеры
-          </NavLink>
-        </NavItem>
-      </Nav>
+      <NavTabs />
       <TabContent>
         <Switch>
           <Route
-            path={`${url}/details`}
+            path="/movie/:id/details"
             render={props => <MovieDetail {...props} movie={movie} />}
           />
-          <Route
-            path={`${url}/videos`}
-            render={props => <MovieVideos {...props} movie={movie} />}
-          />
-          <Route
-            path={`${url}/actors`}
-            render={props => <MovieCredits {...props} movie={movie} />}
-          />
+          <Route path="/movie/:id/videos" component={MovieVideos} />
+          <Route path="/movie/:id/actors" component={MovieCredits} />
         </Switch>
       </TabContent>
     </div>

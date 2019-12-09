@@ -1,19 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Star, StarBorder } from "@material-ui/icons";
 import Fab from "@material-ui/core/Fab";
 import AppContextHOC from "../HOC/AppContextHOC";
 import CallApi from "../../api/api";
 import PropTypes from "prop-types";
+import { Modal, ModalBody } from "reactstrap";
+import LoginForm from "../Header/Login/LoginForm";
 
-const FavoriteBtn = ({
-  favorites,
-  user,
-  session_id,
-  item,
-  getFavorites,
-  toggleModal
-}) => {
+const FavoriteBtn = ({ favorites, user, session_id, item, getFavorites }) => {
   const isFavorite = () => favorites.includes(item.id);
+  const [isOpen, setIsOpen] = useState(false);
 
   const runApiCall = () => {
     return CallApi.post(`/account/${user.id}/favorite`, {
@@ -26,19 +22,25 @@ const FavoriteBtn = ({
     });
   };
 
-  const toggleFavorite = () => {
-    runApiCall();
+  const toggleFavorite = async () => {
+    await runApiCall();
     getFavorites();
-    isFavorite();
   };
 
   return (
     <Fab
-      onClick={session_id ? toggleFavorite : toggleModal}
+      onClick={session_id ? toggleFavorite : () => setIsOpen(!isOpen)}
       size="small"
       color="primary"
       aria-label="add"
     >
+      {isOpen && (
+        <Modal isOpen={isOpen} toggle={() => setIsOpen(!isOpen)}>
+          <ModalBody>
+            <LoginForm />
+          </ModalBody>
+        </Modal>
+      )}
       {isFavorite() ? <Star /> : <StarBorder />}
     </Fab>
   );
@@ -54,7 +56,6 @@ FavoriteBtn.propTypes = {
   user: PropTypes.object,
   session_id: PropTypes.string,
   item: PropTypes.object.isRequired,
-  getFavorites: PropTypes.func.isRequired,
-  toggleModal: PropTypes.func.isRequired
+  getFavorites: PropTypes.func.isRequired
 };
 export default AppContextHOC(FavoriteBtn);

@@ -7,8 +7,7 @@ import PropTypes from "prop-types";
 
 class LoginForm extends PureComponent {
   static propTypes = {
-    updateSessionId: PropTypes.func.isRequired,
-    updateUser: PropTypes.func.isRequired
+    updateAuth: PropTypes.func.isRequired
   };
 
   state = {
@@ -63,6 +62,7 @@ class LoginForm extends PureComponent {
 
   onSubmit = async () => {
     this.setState({
+      ...this.state,
       submitting: true
     });
 
@@ -86,22 +86,16 @@ class LoginForm extends PureComponent {
         }
       });
 
-      this.props.updateSessionId(session_id);
-
       const user = await CallApi.get("/account", {
         params: {
           session_id
         }
       });
-
-      this.setState(
-        {
-          submitting: false
-        },
-        () => {
-          this.props.updateUser(user);
-        }
-      );
+      this.setState({
+        ...this.state,
+        submitting: false
+      });
+      this.props.updateAuth(user, session_id);
     } catch (error) {
       this.setState({
         submitting: false,

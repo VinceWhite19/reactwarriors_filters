@@ -15,8 +15,7 @@ export default class MoviesPage extends Component {
       total_pages: 0
     },
     favorites: [],
-    watchlist: [],
-    showModal: false
+    watchlist: []
   };
 
   onChangeFilters = event => {
@@ -62,12 +61,6 @@ export default class MoviesPage extends Component {
     } catch (err) {
       console.log(err);
     }
-  };
-
-  toggleModal = () => {
-    this.setState(prevState => ({
-      showModal: !prevState.showModal
-    }));
   };
 
   onChangePagination = ({
