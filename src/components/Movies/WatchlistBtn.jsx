@@ -7,7 +7,13 @@ import PropTypes from "prop-types";
 import { Modal, ModalBody } from "reactstrap";
 import LoginForm from "../Header/Login/LoginForm";
 
-const WatchlistBtn = ({ watchlist, item, user, session_id, getWatchlist }) => {
+const WatchlistBtn = ({
+  watchlist,
+  item,
+  user,
+  session_id,
+  fetchWatchlistMovies
+}) => {
   const isWatchlist = () => watchlist.includes(item.id);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -24,7 +30,7 @@ const WatchlistBtn = ({ watchlist, item, user, session_id, getWatchlist }) => {
 
   const toggleBookmark = async () => {
     await runApiCall();
-    getWatchlist();
+    fetchWatchlistMovies({ user, session_id });
   };
 
   return (
@@ -56,6 +62,6 @@ WatchlistBtn.propTypes = {
   user: PropTypes.object,
   session_id: PropTypes.string,
   item: PropTypes.object.isRequired,
-  getWatchlist: PropTypes.func.isRequired
+  fetchWatchlistMovies: PropTypes.func.isRequired
 };
 export default AppContextHOC(WatchlistBtn);

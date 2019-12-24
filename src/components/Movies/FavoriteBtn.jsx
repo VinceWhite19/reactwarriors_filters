@@ -7,7 +7,13 @@ import PropTypes from "prop-types";
 import { Modal, ModalBody } from "reactstrap";
 import LoginForm from "../Header/Login/LoginForm";
 
-const FavoriteBtn = ({ favorites, user, session_id, item, getFavorites }) => {
+const FavoriteBtn = ({
+  favorites,
+  user,
+  session_id,
+  item,
+  fetchFavoriteMovies
+}) => {
   const isFavorite = () => favorites.includes(item.id);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -24,7 +30,7 @@ const FavoriteBtn = ({ favorites, user, session_id, item, getFavorites }) => {
 
   const toggleFavorite = async () => {
     await runApiCall();
-    getFavorites();
+    fetchFavoriteMovies({ user, session_id });
   };
 
   return (
@@ -56,6 +62,6 @@ FavoriteBtn.propTypes = {
   user: PropTypes.object,
   session_id: PropTypes.string,
   item: PropTypes.object.isRequired,
-  getFavorites: PropTypes.func.isRequired
+  fetchFavoriteMovies: PropTypes.func.isRequired
 };
 export default AppContextHOC(FavoriteBtn);

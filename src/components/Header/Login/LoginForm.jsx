@@ -95,7 +95,7 @@ class LoginForm extends PureComponent {
         ...this.state,
         submitting: false
       });
-      this.props.updateAuth(user, session_id);
+      this.props.updateAuth({ user, session_id });
     } catch (error) {
       this.setState({
         submitting: false,
